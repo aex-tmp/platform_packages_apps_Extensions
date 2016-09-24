@@ -128,4 +128,6 @@
     <string name="unit_seconds">Second(s)</string>
     <string name="default_string">Default</string>
 
+    <!-- Quick Settings -->
+    <string name="quick_settings_title">Quick Settings</string>
 </resources>
