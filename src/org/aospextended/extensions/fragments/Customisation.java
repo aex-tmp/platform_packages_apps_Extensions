@@ -160,7 +160,7 @@ public class Customisation extends SettingsPreferenceFragment implements OnPrefe
 
         preference.setEntries(labels.toArray(new String[labels.size()]));
         preference.setEntryValues(pkgs.toArray(new String[pkgs.size()]));
-        preference.setValue(currentPackageName);
+        preference.setValue("Default".equals(currentPackageName) ? pkgs.get(0) : currentPackageName);
         preference.setSummary("Default".equals(currentPackageName) ? "Default" : labels.get(pkgs.indexOf(currentPackageName)));
     }
 }
