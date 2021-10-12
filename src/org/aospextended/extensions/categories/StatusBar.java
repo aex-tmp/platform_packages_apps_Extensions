@@ -25,7 +25,6 @@ import androidx.preference.PreferenceScreen;
 import androidx.preference.Preference.OnPreferenceChangeListener;
 
 import com.android.internal.logging.nano.MetricsProto;
-import com.android.internal.util.aospextended.AEXUtils;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 
@@ -33,7 +32,6 @@ public class StatusBar extends SettingsPreferenceFragment implements
         Preference.OnPreferenceChangeListener {
 
     private static final String TAG = "StatusBar";
-    private static final String PREF_KEY_CUTOUT = "cutout_settings";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -44,13 +42,6 @@ public class StatusBar extends SettingsPreferenceFragment implements
 
         ContentResolver resolver = getActivity().getContentResolver();
 
-        Preference mCutoutPref = (Preference) findPreference(PREF_KEY_CUTOUT);
-
-        String hasDisplayCutout = getResources().getString(com.android.internal.R.string.config_mainBuiltInDisplayCutout);
-
-        if (TextUtils.isEmpty(hasDisplayCutout)) {
-            getPreferenceScreen().removePreference(mCutoutPref);
-        }
     }
 
     @Override
