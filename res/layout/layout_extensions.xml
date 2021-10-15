@@ -10,30 +10,51 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
+-->    
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="8dp"
+    android:gravity="center"
+    android:theme="@style/Theme.TabTheme"
+    android:background="@android:color/transparent">
 
-<RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+  <androidx.cardview.widget.CardView
+    android:layout_width="match_parent"
+    android:layout_height="74dp"
+    android:layout_marginTop="@dimen/card_margin_top"
+    android:layout_marginBottom="@dimen/card_margin_bottom"
+    android:layout_marginRight="@dimen/card_margin_right"
+    android:layout_marginLeft="@dimen/card_margin_left"
+    android:padding="8dp"
+    app:cardCornerRadius="@dimen/card_corner_radius"
+    app:cardElevation="@dimen/card_elevation"
+    app:cardBackgroundColor="@color/cardview_bg">
 
-    <FrameLayout
-            android:id="@+id/fragment_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/bottom_navigation" />
-
-    <github.com.st235.lib_expandablebottombar.ExpandableBottomBar
-        android:id="@+id/bottom_navigation"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        app:exb_backgroundColor="@color/bottombar_bg"
-        app:exb_itemInactiveColor="@color/bottom_inactive"
-        app:exb_items="@menu/menu_categories"
-        app:exb_transitionDuration="200"
-        app:exb_item_vertical_margin="12dp"
-        />     
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
+        android:scrollbars="none"
+        app:tabIndicator="@drawable/tabs_indicator_background"
+        app:tabIndicatorHeight="0dp"
+        app:tabSelectedTextColor="?android:attr/colorAccent"
+        app:tabIconTint="@color/tab_icon_color"
+        app:tabTextAppearance="@style/TextAppearance.Tab"
+        app:tabMode="scrollable"
+        app:tabTextColor="?android:attr/textColorSecondary"/>
 
-</RelativeLayout>
+  </androidx.cardview.widget.CardView>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>

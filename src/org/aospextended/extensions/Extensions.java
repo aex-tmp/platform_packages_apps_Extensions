@@ -41,13 +41,16 @@ import android.widget.Toast;
 
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.preference.Preference;
 import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.viewpager.widget.ViewPager;
 
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
-import github.com.st235.lib_expandablebottombar.ExpandableBottomBar;
+import com.google.android.material.tabs.TabLayout;
 
 import org.aospextended.extensions.aexstats.Constants;
 import org.aospextended.extensions.aexstats.RequestInterface;
@@ -60,14 +63,20 @@ import org.aospextended.extensions.categories.NotificationsPanel;
 import org.aospextended.extensions.categories.StatusBar;
 import org.aospextended.extensions.categories.System;
 
+import com.android.settings.core.SettingsBaseActivity;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class Extensions extends SettingsPreferenceFragment implements   
+public class Extensions extends SettingsPreferenceFragment implements
        Preference.OnPreferenceChangeListener {
 
     private static final int MENU_HELP  = 0;
@@ -87,33 +96,30 @@ public class Extensions extends SettingsPreferenceFragment implements
 
         View view = inflater.inflate(R.layout.layout_extensions, container, false);
 
-        final ExpandableBottomBar bottomNavigation = (ExpandableBottomBar) view.findViewById(R.id.bottom_navigation);
+        ViewPager viewPager = view.findViewById(R.id.view_pager);
 
-        bottomNavigation.setOnItemSelectedListener((mView, menuItem, byUser) -> {
-            if (menuItem.getId() == R.id.status_bar_category) {
-                switchFrag(new StatusBar());
-            } else if (menuItem.getId() == R.id.notifications_panel_category) {
-                switchFrag(new NotificationsPanel());
-            } else if (menuItem.getId() == R.id.navigation_and_recents_category) {
-                switchFrag(new NavigationAndRecents());
-            } else if (menuItem.getId() == R.id.lockscreen_category) {
-                switchFrag(new Lockscreen());
-            } else if (menuItem.getId() == R.id.system_category) {
-                switchFrag(new System());
-            }
-            return null;
-        });
+        TabLayout tabLayout = view.findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getFragmentManager(), 0);
+        viewPagerAdapter.addFragment(new StatusBar(), R.string.status_bar_category);
+        viewPagerAdapter.addFragment(new NotificationsPanel(),
+                R.string.notifications_panel_category);
+        viewPagerAdapter.addFragment(new NavigationAndRecents(),
+                R.string.navigation_and_recents_category);
+        viewPagerAdapter.addFragment(new Lockscreen(), R.string.lockscreen_category);
+        viewPagerAdapter.addFragment(new System(), R.string.system_category);
+
+        viewPager.setAdapter(viewPagerAdapter);
+
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_status_bar_category);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_notifications_panel_category);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_navigation_and_recents_category);
+        tabLayout.getTabAt(3).setIcon(R.drawable.ic_lockscreen_category);
+        tabLayout.getTabAt(4).setIcon(R.drawable.ic_system_category);
 
         setHasOptionsMenu(true);
-        Fragment fragment = (Fragment) getFragmentManager().findFragmentById(R.id.fragment_frame);
-        if (fragment == null) {
-            getFragmentManager().beginTransaction().replace(R.id.fragment_frame, new StatusBar()).commit();
-        }
         return view;
-    }
-
-    private void switchFrag(Fragment fragment) {
-        getFragmentManager().beginTransaction().replace(R.id.fragment_frame, fragment).commit();
     }
 
     @Override
@@ -135,6 +141,10 @@ public class Extensions extends SettingsPreferenceFragment implements
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        SettingsBaseActivity activity = (SettingsBaseActivity) getActivity();
+        if (activity != null && activity.getAppBarLayout() != null) {
+            activity.getAppBarLayout().setExpanded(false);
+        }
     }
 
     private void pushStats() {
@@ -274,6 +284,47 @@ public class Extensions extends SettingsPreferenceFragment implements
         @Override
         public void onCancel(DialogInterface dialog) {
 
+        }
+    }
+
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
+        private List<Fragment> fragments = new ArrayList<>();
+        private List<String> fragmentTitles = new ArrayList<>();
+
+        public ViewPagerAdapter(FragmentManager fm, int behavior) {
+            super(fm, behavior);
+        }
+
+        public void addFragment(Fragment fragment, int title){
+            fragments.add(fragment);
+            fragmentTitles.add(getContext().getString(title));
+        }
+
+        public void onTabSelected(TabLayout.Tab tab, int pos) {
+            tab.setText(fragmentTitles.get(pos));
+        }
+
+        public void onTabUnselected(TabLayout.Tab tab, int pos) {
+            tab.setText("");
+        }
+
+        public void onTapCreated(TabLayout.Tab tab, boolean selected) {
+            tab.setText(selected ? fragmentTitles.get(tab.getPosition()) : "");
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return fragments.size();
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return fragmentTitles.get(position);
         }
     }
 }
