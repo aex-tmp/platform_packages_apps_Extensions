@@ -63,15 +63,15 @@ import org.aospextended.support.preference.SystemSettingSwitchPreference;
 @SearchIndexable
 public class NavbarSettings extends SettingsPreferenceFragment implements OnPreferenceChangeListener {
 
-    //private static final String KEY_NAVIGATION_BAR_ENABLED = "force_show_navbar";
-    //private static final String KEY_LAYOUT_SETTINGS = "layout_settings";
-    //private static final String KEY_NAVIGATION_BAR_ARROWS = "navigation_bar_menu_arrow_keys";
+    private static final String KEY_NAVIGATION_BAR_ENABLED = "force_show_navbar";
+    private static final String KEY_LAYOUT_SETTINGS = "layout_settings";
+    private static final String KEY_NAVIGATION_BAR_ARROWS = "navigation_bar_menu_arrow_keys";
 
-    //private Preference mLayoutSettings;
-    //private SwitchPreference mNavigationBar;
-    //private SystemSettingSwitchPreference mNavigationArrows;
+    private Preference mLayoutSettings;
+    private SwitchPreference mNavigationBar;
+    private SystemSettingSwitchPreference mNavigationArrows;
 
-    //private boolean mIsNavSwitchingMode = false;
+    private boolean mIsNavSwitchingMode = false;
 
     private Handler mHandler;
 
@@ -84,7 +84,7 @@ public class NavbarSettings extends SettingsPreferenceFragment implements OnPref
         final ContentResolver resolver = getActivity().getContentResolver();
         final PreferenceScreen prefSet = getPreferenceScreen();
 
-        /*final boolean defaultToNavigationBar = getResources().getBoolean(
+        final boolean defaultToNavigationBar = getResources().getBoolean(
                 com.android.internal.R.bool.config_showNavigationBar);
         final boolean navigationBarEnabled = Settings.System.getIntForUser(
                 resolver, Settings.System.FORCE_SHOW_NAVBAR,
@@ -102,7 +102,7 @@ public class NavbarSettings extends SettingsPreferenceFragment implements OnPref
 
         mHandler = new Handler();
 
-        mLayoutSettings.setEnabled(!AEXUtils.isOverlayEnabled("com.android.internal.systemui.navbar.gestural"));*/
+        mLayoutSettings.setEnabled(!AEXUtils.isOverlayEnabled("com.android.internal.systemui.navbar.gestural"));
 
     }
 
@@ -118,7 +118,7 @@ public class NavbarSettings extends SettingsPreferenceFragment implements OnPref
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        /*if (preference == mNavigationBar) {
+        if (preference == mNavigationBar) {
             boolean value = (Boolean) objValue;
             if (mIsNavSwitchingMode) {
                 return false;
@@ -134,7 +134,7 @@ public class NavbarSettings extends SettingsPreferenceFragment implements OnPref
             }, 1500);
             mLayoutSettings.setEnabled(!AEXUtils.isOverlayEnabled("com.android.internal.systemui.navbar.gestural"));
             return true;
-        }*/
+        }
         return false;
     }
 
